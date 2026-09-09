@@ -1,7 +1,7 @@
 window.APP_CONFIG = {
   title: '歡迎來到AI University',
   courseLabel: '生成式 AI 系統設計與實務',
-  apiUrl: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
+  apiUrl: 'https://script.google.com/macros/s/AKfycbxCFKtFJbwYavP5TMXgFcLsRWx7dVaV4BS44cLrNWwB_a1wfYmqZOExXqoeDNVz5Zzh/exec',
   formVersion: 'ai-university-game-2026-09-v1',
   autosaveKey: 'ai-university-game-draft-v2-academic',
   demoStorageKey: 'ai-university-game-responses-v2-academic',
