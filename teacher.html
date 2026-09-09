@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI University｜教師後台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="teacher-body">
+<main class="teacher-shell">
+  <section id="login" class="panel teacher-login">
+    <div class="q-kicker">TEACHER ACCESS</div>
+    <h1>AI University 教師後台</h1>
+    <p class="helper">依「學期 → 課程 → 班級」查看參與人數、知識題正確率、學生願望與個別作答。</p>
+    <div class="login-row"><input id="password" class="teacher-input" type="password" placeholder="教師密碼"><button id="loginBtn" class="primary-btn" style="margin:0;width:auto">進入後台</button></div>
+    <p id="demoHint" class="helper"></p>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <header class="teacher-head">
+      <div><div class="q-kicker">LIVE CLASS INSIGHT</div><h1>歡迎來到AI University｜班級探索結果</h1><p class="helper" id="updated">尚未更新</p></div>
+      <div class="teacher-actions"><button id="refreshBtn" class="ghost-btn">立即更新</button><button id="exportBtn" class="secondary-btn">匯出目前篩選 CSV</button></div>
+    </header>
+
+    <section class="panel academic-filter-panel">
+      <div class="filter-title"><div><div class="q-kicker">ACADEMIC FILTER</div><h2>學期 → 課程 → 班級</h2></div><div id="activeScope" class="scope-badge">全部資料</div></div>
+      <div class="academic-filters">
+        <label><span>學期</span><select id="termSelect" class="teacher-select"></select></label>
+        <label><span>課程</span><select id="courseSelect" class="teacher-select"></select></label>
+        <label><span>班級</span><select id="classSelect" class="teacher-select"></select></label>
+      </div>
+      <div class="student-link-box">
+        <div><b>學生專屬連結</b><div id="studentLink" class="student-link-text">選定一個學期、課程與班級後，這裡會產生專屬網址。</div></div>
+        <button id="copyLinkBtn" class="ghost-btn" disabled>複製網址</button>
+      </div>
+    </section>
+
+    <div class="kpis"><div class="kpi"><span>已完成探索</span><strong id="kResponses">0</strong>人</div><div class="kpi"><span>AI 高頻使用者</span><strong id="kPower">0%</strong>幾乎每天</div><div class="kpi"><span>知識正確率</span><strong id="kAccuracy">—</strong>核心題</div><div class="kpi"><span>系統設計自評</span><strong id="kSelf">—</strong>1–5 分</div></div>
+    <div class="dash-grid"><section class="panel"><h2>AI 使用頻率</h2><div id="freq"></div></section><section class="panel"><h2>常用 AI 裝備</h2><div id="tools"></div></section></div>
+    <div class="dash-grid"><section class="panel"><h2>最需要加強的知識</h2><div id="weak"></div></section><section class="panel"><h2>學生最擔心什麼</h2><div id="concerns"></div></section></div>
+    <section class="panel"><h2>🔮 AI 願望牆</h2><p class="helper">目前篩選範圍內，學生最想做出的 AI 系統／最想解決的問題。</p><div id="wishes"></div></section>
+    <section class="panel"><h2>學生作答明細</h2><div class="detail-toolbar"><input id="filter" class="teacher-input" placeholder="搜尋姓名…"><span id="rowCount" class="helper"></span></div><div class="table-wrap"><table class="teacher-table"><thead><tr><th>班級</th><th>姓名</th><th>完成時間</th><th>AI 使用頻率</th><th>XP</th><th>知識答對</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></section>
+  </section>
+</main>
+<div id="modal" class="modal hidden"><div class="modal-card"><div class="teacher-head" style="box-shadow:none;padding:0"><h2 id="modalTitle">作答明細</h2><button id="closeModal" class="ghost-btn">關閉</button></div><div id="modalBody"></div></div></div>
+<div id="toast" class="toast"></div>
+<script src="config.js"></script><script src="game-data.js"></script><script src="teacher.js"></script>
+</body></html>
