@@ -1,7 +1,14 @@
-# AI University
+# AI University — v2 視覺 × 多班級版
 
-AI University 多班級遊戲化課前探索網站。
+學生端視覺完整沿用「AI University 一鍵啟動版 v2」。
+多班級資訊只由網址參數帶入，不增加學生端 UI。
 
-資料結構：學期 → 課程 → 班級 → 學生。
+## 學生網址範例
+- A班：`?term=115-1&course=genai-system-design&class=A`
+- B班：`?term=115-1&course=genai-system-design&class=B`
+- EMBA班：`?term=115-1&course=genai-system-design&class=EMBA`
 
-學生端只需輸入姓名；班級資訊由專屬網址自動帶入。教師端可依學期、課程、班級切換統計。
+## 教師後台
+`teacher.html`
+
+正式收資料前，請把 `config.js` 的 `apiUrl` 改成 Google Apps Script Web App `/exec` 網址。

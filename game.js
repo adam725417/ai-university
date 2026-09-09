@@ -6,6 +6,7 @@
   const app = $('#app');
   const toast = $('#toast');
 
+  // Academic context is carried silently in the URL so the student UI stays identical to v2.
   function findAcademicContext(){
     const catalog=Array.isArray(cfg.academicCatalog)?cfg.academicCatalog:[];
     const params=new URLSearchParams(location.search);
@@ -21,15 +22,14 @@
   const academic=findAcademicContext();
   const storageSuffix=[academic.termId,academic.courseId,academic.classId].map(x=>encodeURIComponent(x||'default')).join(':');
   const autosaveKey=`${cfg.autosaveKey}:${storageSuffix}`;
-
   const state = {
     name:'', answers:{}, currentScreen:'welcome', currentLevel:0, quizIndex:{}, quizLocked:{},
     xp:0, combo:0, completedLevels:[], startedAt:null, submitted:false
   };
 
   const heroAssets = {
-    survival:'assets/lv1-hero.svg', gear:'assets/lv2-hero.svg', arena:'assets/lv3-hero.svg',
-    mission:'assets/lv4-hero.svg', boss:'assets/boss-hero.svg'
+    survival:'assets/lv1-hero.jpg', gear:'assets/lv2-hero.jpg', arena:'assets/lv3-hero.jpg',
+    mission:'assets/lv4-hero.jpg', boss:'assets/boss-hero.jpg'
   };
 
   function esc(v=''){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
@@ -41,7 +41,7 @@
 
   function hudOverlay(extraClass=''){
     const done=doneCount();
-    return `<div class="real-hud ${extraClass}"><div class="hud-card player-card"><div class="hud-line"><span class="hud-name">👤 ${esc(state.name||'探索者')}</span></div><div class="hud-class">🏫 ${esc(academic.classLabel)}</div><div class="hud-divider"></div><div class="hud-xp">⭐ ${state.xp} XP</div></div><div class="hud-card progress-card"><div class="hud-line"><span class="mini-status">已完成 ${done} / ${levels.length} 關</span></div><div class="mini-track"><i style="width:${Math.min(100,done/levels.length*100)}%"></i></div></div></div>`;
+    return `<div class="real-hud ${extraClass}"><div class="hud-card player-card"><div class="hud-line"><span class="hud-name">👤 ${esc(state.name||'探索者')}</span></div><div class="hud-divider"></div><div class="hud-xp">⭐ ${state.xp} XP</div></div><div class="hud-card progress-card"><div class="hud-line"><span class="mini-status">已完成 ${done} / ${levels.length} 關</span></div><div class="mini-track"><i style="width:${Math.min(100,done/levels.length*100)}%"></i></div></div></div>`;
   }
   function progress(){const done=doneCount();return `<div class="progress-strip"><b>探索進度 ${done}/${levels.length}</b><div class="progress-track"><i style="width:${done/levels.length*100}%"></i></div><b>⭐ ${state.xp} XP</b></div>`}
   function imageArt(src, cls='', hud=true, alt='AI University 遊戲插圖'){return `<div class="art-frame ${cls}"><img src="${src}" alt="${esc(alt)}">${hud?hudOverlay():''}</div>`}
@@ -49,10 +49,9 @@
   function welcome(){
     state.currentScreen='welcome'; save(); recalcXp();
     app.innerHTML=`<section class="screen">
-      ${imageArt('assets/welcome-hero.svg','welcome-art',false,'歡迎來到 AI University 校園')}
+      ${imageArt('assets/welcome-hero.jpg','welcome-art',false,'歡迎來到 AI University 校園')}
       <div class="welcome-panel">
-        <div class="academic-pass"><span>🏫</span><div><small>${esc(academic.termLabel)}</small><b>${esc(academic.courseLabel)}</b><strong>${esc(academic.classLabel)}</strong></div></div>
-        <div class="welcome-intro"><span class="avatar-dot">👤</span><div><b>請輸入你的姓名</b><div class="helper">班級已由老師的專屬連結自動設定，你只要留下姓名即可。</div></div></div>
+        <div class="welcome-intro"><span class="avatar-dot">👤</span><div><b>請輸入你的姓名</b><div class="helper">準備好就開始今天的 AI 探索任務。</div></div></div>
         <input id="nameInput" class="name-input" placeholder="例如：王小明" maxlength="30" value="${esc(state.name)}" autocomplete="name" />
         <button id="startBtn" class="primary-btn">開始我的 AI 探索 →</button>
         <div class="tiny-note">⏱ 約 10–15 分鐘・沒有標準答案・安心探索</div>
@@ -73,7 +72,7 @@
       return `<button class="map-hotspot map-${i+1} ${done?'done':''} ${current?'current':''} ${!unlocked?'locked':''}" data-level="${i}" data-unlocked="${unlocked}" aria-label="Lv.${l.level} ${esc(l.title)}"></button>`;
     }).join('');
     app.innerHTML=`<section class="screen">
-      <div class="map-shell"><img src="assets/map-full.svg" alt="AI University 世界地圖">${hudOverlay('map-hud')}${hotspots}</div>
+      <div class="map-shell"><img src="assets/map-full.jpg" alt="AI University 世界地圖">${hudOverlay('map-hud')}${hotspots}</div>
       <div class="map-footer"><button class="ghost-btn" id="homeBtn">← 返回首頁</button><button class="primary-btn" id="continueBtn">前往目前關卡 →</button></div>
     </section>`;
     document.querySelectorAll('[data-level]').forEach(el=>el.addEventListener('click',()=>{if(el.dataset.unlocked!=='true'){showToast('先完成前一關才能解鎖喔！');return}state.currentLevel=Number(el.dataset.level);levelScreen(state.currentLevel)}));
@@ -144,7 +143,7 @@
   function completeScreen(){
     state.currentScreen='complete';if(!state.completedLevels.includes('boss'))state.completedLevels.push('boss');recalcXp();save();burst();
     const gear=(state.answers.ai_tools||[]).length;
-    app.innerHTML=`<section class="screen">${imageArt('assets/complete-hero.svg','completion-art',true,'AI Explorer 探索完成慶典')}<div class="completion-card"><h1>探索完成！</h1><span class="ribbon-text">你已成為 AI Explorer 👑</span><p class="q-title">${esc(state.name)}，你完成了所有探索任務！</p><div class="completion-context">${esc(academic.termLabel)} · ${esc(academic.courseLabel)} · ${esc(academic.classLabel)}</div><div class="completion-levels">${levels.map(l=>`<div class="completion-level"><span>${l.icon}</span>Lv.${l.level}<br>✓ 完成</div>`).join('')}</div><div class="summary-grid"><div class="summary-stat">🏁<b>5 / 5</b>關卡完成</div><div class="summary-stat">🎒<b>${gear}</b>AI 裝備</div><div class="summary-stat">⭐<b>${state.xp}</b>XP</div></div><div class="completion-actions"><button id="mapBtn" class="ghost-btn">🗺️ 世界地圖</button><button id="submitBtn" class="primary-btn">🏆 送出並完成遊戲</button></div><p class="tiny-note">接下來，真正的 AI 課程正式開始！</p></div></section>`;
+    app.innerHTML=`<section class="screen">${imageArt('assets/complete-hero.jpg','completion-art',true,'AI Explorer 探索完成慶典')}<div class="completion-card"><h1>探索完成！</h1><span class="ribbon-text">你已成為 AI Explorer 👑</span><p class="q-title">${esc(state.name)}，你完成了所有探索任務！</p><div class="completion-levels">${levels.map(l=>`<div class="completion-level"><span>${l.icon}</span>Lv.${l.level}<br>✓ 完成</div>`).join('')}</div><div class="summary-grid"><div class="summary-stat">🏁<b>5 / 5</b>關卡完成</div><div class="summary-stat">🎒<b>${gear}</b>AI 裝備</div><div class="summary-stat">⭐<b>${state.xp}</b>XP</div></div><div class="completion-actions"><button id="mapBtn" class="ghost-btn">🗺️ 世界地圖</button><button id="submitBtn" class="primary-btn">🏆 送出並完成遊戲</button></div><p class="tiny-note">接下來，真正的 AI 課程正式開始！</p></div></section>`;
     $('#mapBtn').addEventListener('click',mapScreen);$('#submitBtn').addEventListener('click',submitGame);
   }
   function burst(){const box=$('#confetti');box.innerHTML='';for(let i=0;i<50;i++){const s=document.createElement('span');s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*.8+'s';s.style.background=['#ffd45a','#2797ef','#78ddb0','#ff9eb4','#9d81ef'][i%5];box.appendChild(s)}setTimeout(()=>box.innerHTML='',3000)}
